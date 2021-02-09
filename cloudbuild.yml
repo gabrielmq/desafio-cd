@@ -1,0 +1,13 @@
+steps:
+  - id: "Executando testes"
+    name: "gcr.io/cloud-builders/go"
+    args: [ "test", "./..." ]
+    env: [ "GOPATH=." ]
+
+  # - id: "Buildando imagem"
+  #   name: "gcr.io/cloud-builders/docker"
+  #   args: [ "build", "-t", "gcr.io/$PROJECT_ID/golang-server:$SHORT_SHA", "." ]
+
+  # - id: "Push imagem GCP"
+  #   name: "gcr.io/cloud-builders/docker"
+  #   args: [ "push", "gcr.io/$PROJECT_ID/golang-server:$SHORT_SHA" ]

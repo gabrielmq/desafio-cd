@@ -1,0 +1,29 @@
+steps:
+  - id: "Executando testes"
+    name: "gcr.io/cloud-builders/go"
+    args: [ "test", "./..." ]
+    env: [ "GOPATH=." ]
+
+  - id: "Buildando imagem"
+    name: "gcr.io/cloud-builders/docker"
+    args: [ "build", "-t", "gcr.io/$PROJECT_ID/golang-server:$SHORT_SHA", "." ]
+
+  - id: "Push image GCP"
+    name: "gcr.io/cloud-builders/docker"
+    args: [ "push", "gcr.io/$PROJECT_ID/golang-server:$SHORT_SHA" ]
+  
+  - id: "Ajustando deployment k8s"
+    name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: '/bin/sh'
+    args:
+      - '-c'
+      - |
+        sed 's#img-golang-server#gcr.io/$PROJECT_ID/golang-server:$SHORT_SHA#g' k8s/deployment.yml > k8s/deployment-new.yml;
+        cat k8s/deployment-new.yml;
+  
+  - id: "Deploy k8s"
+    name: 'gcr.io/cloud-builders/kubectl'
+    args: [ 'apply', '-f', 'k8s/deployment-new.yml' ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-desafio-cd'

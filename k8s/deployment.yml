@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: golang-server
+  template:
+    metadata:
+      labels:
+        app: golang-server
+    spec:
+      containers:
+      - name: golang-server
+        image: img-golang-server
+        ports:
+          - containerPort: 8000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
