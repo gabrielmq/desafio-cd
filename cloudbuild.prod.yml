@@ -19,7 +19,6 @@ steps:
       - '-c'
       - |
         sed 's#img-golang-server#gcr.io/$PROJECT_ID/golang-server:$SHORT_SHA#g' k8s/deployment.yml > k8s/deployment-new.yml;
-        cat k8s/deployment-new.yml;
   
   - id: "Deploy k8s"
     name: 'gcr.io/cloud-builders/kubectl'
